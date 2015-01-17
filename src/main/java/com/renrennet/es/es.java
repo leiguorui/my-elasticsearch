@@ -22,6 +22,18 @@ import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
  * Created by leiguorui on 1/17/15.
  */
 public class es {
+<<<<<<< HEAD
+=======
+    /**
+     * 生成要插入elasticsearch的document
+     * @param title
+     * @param content
+     * @param postDate
+     * @param tags
+     * @param author
+     * @return
+     */
+>>>>>>> some operations with java api
     public static Map<String, Object> putJsonDocument(String title, String content, Date postDate,
                                                       String[] tags, String author){
 
@@ -36,6 +48,14 @@ public class es {
         return jsonDocument;
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * 创建index，并插入document
+     * @param client
+     * @return
+     */
+>>>>>>> some operations with java api
     public static IndexResponse index(Client client){
         IndexResponse response = client.prepareIndex("kodcucom", "article", "1")
                 .setSource(putJsonDocument("ElasticSearch: Java API",
@@ -48,6 +68,14 @@ public class es {
         return response;
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * get document
+     * @param client
+     * @return
+     */
+>>>>>>> some operations with java api
     public static GetResponse getDocument(Client client){
         GetResponse getResponse = client.prepareGet("kodcucom", "article", "1").execute().actionGet();
 
@@ -64,6 +92,18 @@ public class es {
         return getResponse;
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * search document
+     * @param client
+     * @param index
+     * @param type
+     * @param field
+     * @param value
+     * @return
+     */
+>>>>>>> some operations with java api
     public static SearchResponse searchDocument(Client client, String index, String type,
                                       String field, String value){
 
@@ -87,6 +127,18 @@ public class es {
         return response;
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * update document
+     * @param client
+     * @param index
+     * @param type
+     * @param id
+     * @param field
+     * @param newValue
+     */
+>>>>>>> some operations with java api
     public static void updateDocument(Client client, String index, String type,
                                       String id, String field, String newValue){
 
@@ -98,6 +150,16 @@ public class es {
                 .setScriptParams(updateObject).execute().actionGet();
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * delete document
+     * @param client
+     * @param index
+     * @param type
+     * @param id
+     */
+>>>>>>> some operations with java api
     public static void deleteDocument(Client client, String index, String type, String id){
 
         DeleteResponse response = client.prepareDelete(index, type, id).execute().actionGet();
