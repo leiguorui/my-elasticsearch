@@ -6,6 +6,8 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.search.SearchHit;
 
@@ -22,8 +24,7 @@ import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
  * Created by leiguorui on 1/17/15.
  */
 public class es {
-<<<<<<< HEAD
-=======
+
     /**
      * 生成要插入elasticsearch的document
      * @param title
@@ -33,7 +34,6 @@ public class es {
      * @param author
      * @return
      */
->>>>>>> some operations with java api
     public static Map<String, Object> putJsonDocument(String title, String content, Date postDate,
                                                       String[] tags, String author){
 
@@ -48,14 +48,11 @@ public class es {
         return jsonDocument;
     }
 
-<<<<<<< HEAD
-=======
     /**
      * 创建index，并插入document
      * @param client
      * @return
      */
->>>>>>> some operations with java api
     public static IndexResponse index(Client client){
         IndexResponse response = client.prepareIndex("kodcucom", "article", "1")
                 .setSource(putJsonDocument("ElasticSearch: Java API",
@@ -68,32 +65,27 @@ public class es {
         return response;
     }
 
-<<<<<<< HEAD
-=======
     /**
      * get document
      * @param client
      * @return
      */
->>>>>>> some operations with java api
     public static GetResponse getDocument(Client client){
         GetResponse getResponse = client.prepareGet("kodcucom", "article", "1").execute().actionGet();
 
         Map<String, Object> source = getResponse.getSource();
 
-        System.out.println("------------------------------");
+        System.out.println("------------getDocument start--------------");
         System.out.println("Index: " + getResponse.getIndex());
         System.out.println("Type: " + getResponse.getType());
         System.out.println("Id: " + getResponse.getId());
         System.out.println("Version: " + getResponse.getVersion());
         System.out.println(source);
-        System.out.println("------------------------------");
+        System.out.println("------------getDocument end---------------");
 
         return getResponse;
     }
 
-<<<<<<< HEAD
-=======
     /**
      * search document
      * @param client
@@ -103,7 +95,6 @@ public class es {
      * @param value
      * @return
      */
->>>>>>> some operations with java api
     public static SearchResponse searchDocument(Client client, String index, String type,
                                       String field, String value){
 
@@ -117,18 +108,16 @@ public class es {
 
         SearchHit[] results = response.getHits().getHits();
 
+        System.out.println("----------searchDocument start--------------");
         System.out.println("Current results: " + results.length);
         for (SearchHit hit : results) {
-            System.out.println("------------------------------");
             Map<String,Object> result = hit.getSource();
             System.out.println(result);
         }
-
+        System.out.println("----------searchDocument end--------------");
         return response;
     }
 
-<<<<<<< HEAD
-=======
     /**
      * update document
      * @param client
@@ -138,7 +127,6 @@ public class es {
      * @param field
      * @param newValue
      */
->>>>>>> some operations with java api
     public static void updateDocument(Client client, String index, String type,
                                       String id, String field, String newValue){
 
@@ -150,8 +138,6 @@ public class es {
                 .setScriptParams(updateObject).execute().actionGet();
     }
 
-<<<<<<< HEAD
-=======
     /**
      * delete document
      * @param client
@@ -159,7 +145,6 @@ public class es {
      * @param type
      * @param id
      */
->>>>>>> some operations with java api
     public static void deleteDocument(Client client, String index, String type, String id){
 
         DeleteResponse response = client.prepareDelete(index, type, id).execute().actionGet();
@@ -171,8 +156,8 @@ public class es {
     }
 
     public static void main(String[] args){
-        Node node    = nodeBuilder().node();
-        Client client   = node.client();
+        Client client = new TransportClient()
+                .addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
 
         index(client);
 
@@ -182,8 +167,8 @@ public class es {
 
         searchDocument(client, "kodcucom", "article", "title", "ElasticSearch");
 
-        deleteDocument(client, "kodcucom", "article", "1");
+//        deleteDocument(client, "kodcucom", "article", "1");
 
-        node.close();
+        client.close();
     }
 }
