@@ -156,6 +156,10 @@ public class es {
     }
 
     public static void main(String[] args){
+        //这里创建了新node，会消耗较大的时间，不建议使用
+//        Node node    = nodeBuilder().node();
+//        Client client   = node.client();
+
         Client client = new TransportClient()
                 .addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
 
@@ -167,7 +171,7 @@ public class es {
 
         searchDocument(client, "kodcucom", "article", "title", "ElasticSearch");
 
-//        deleteDocument(client, "kodcucom", "article", "1");
+        deleteDocument(client, "kodcucom", "article", "1");
 
         client.close();
     }
