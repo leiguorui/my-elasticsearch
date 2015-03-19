@@ -16,3 +16,4 @@ To connect to the locally installed ES server,
 #### elasticsearch 集成ik中文分词器
 
 1.  http://my.oschina.net/xiaohui249/blog/232784
+2.	http://www.searchtech.pro/articles/2013/02/18/1361190717673.html
