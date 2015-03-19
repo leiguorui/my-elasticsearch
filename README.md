@@ -13,3 +13,6 @@ To connect to the locally installed ES server,
 > * query document
 > * delete document
 
+#### elasticsearch 集成ik中文分词器
+
+1.  http://my.oschina.net/xiaohui249/blog/232784
