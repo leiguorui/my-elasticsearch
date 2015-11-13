@@ -23,7 +23,7 @@ import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 /**
  * Created by leiguorui on 1/17/15.
  */
-public class es {
+public class ElasticSearch {
 
     /**
      * 生成要插入elasticsearch的document
