@@ -1,0 +1,4 @@
+//For log data in general, queries are match only, so none of this is important. Setting the “index” field to “not_analyzed” ensures Elasticsearch won’t waste time unnecessarily tokenizing every string field.
+
+
+//

@@ -1,0 +1,36 @@
+{
+  "_my_comment": "车源汇日志在elasticsearch中index template",
+  "template": "sirius-log-*",
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "log": {
+      "_all": {
+        "enabled": false
+      },
+      "_id": {
+        "path": "id"
+      },
+      "properties": {
+        "timestamp": {
+          "type": "date",
+          "fielddata": {
+            "format": "doc_values"
+          }
+        },
+        "uri": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "server_ip": {
+          "type": "ip"
+        },
+        "remote_ip": {
+          "type": "ip"
+        }
+      }
+    }
+  }
+}
