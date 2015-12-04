@@ -39,7 +39,7 @@ public class ElasticSearcServiceImpl implements ElasticSearchService {
     @Autowired
     private CustomResourceLoader resourceLoader;
 
-    @Value( "${es.host}" )
+    @Value( "${es.url}" )
     private String esHost;
 
     Gson gson = new Gson();

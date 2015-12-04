@@ -91,7 +91,12 @@ public class PostServiceImplTest{
     }
 
     @Test
-    public void testLogDao() throws Exception {
+    public void testIntexTemplate() throws Exception {
+        esService.setIndexTemplate(null);
+    }
+
+    @Test
+    public void testLogSave() throws Exception {
         String nowDate = new DateTime().toString("yyyy-MM-dd");
         String indexName = "sirius_log_"+nowDate;
         String typeName = "user_action";
