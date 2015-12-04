@@ -7,12 +7,16 @@
     <mvc:annotation-driven />
     <context:component-scan base-package="cn.injava.es" />
 
+    <!--Register a Properties File in XML-->
+    <context:property-placeholder location="classpath:config.properties" />
+    <!-- // Register a Properties File in XML-->
+
     <!--mysql database connect-->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="" />
-        <property name="username" value="" />
-        <property name="password" value="" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.user}" />
+        <property name="password" value="${jdbc.pswd}" />
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager" />

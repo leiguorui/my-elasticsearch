@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.ResultsExtractor;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
@@ -37,6 +38,9 @@ public class ElasticSearcServiceImpl implements ElasticSearchService {
 
     @Autowired
     private CustomResourceLoader resourceLoader;
+
+    @Value( "${es.host}" )
+    private String esHost;
 
     Gson gson = new Gson();
 
@@ -100,6 +104,6 @@ public class ElasticSearcServiceImpl implements ElasticSearchService {
     public void setIndexTemplate(JsonObject template) throws IOException {
         String indexTemplate = resourceLoader.getResourceData("classpath:/es/template/sirius_log_template.json");
 
-        restTemplate.put("http://10.0.0.40:9200/_template/sirius_logs_per_index", indexTemplate);
+        restTemplate.put(esHost+"/_template/sirius_logs_per_index", indexTemplate);
     }
 }
