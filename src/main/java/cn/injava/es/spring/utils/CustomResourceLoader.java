@@ -36,7 +36,7 @@ public class CustomResourceLoader implements ResourceLoaderAware {
      * Loading resource file from classpath : "classpath:classpathdata.txt"
      * Loading resource file from file system : "file:c:/temp/filesystemdata.txt"
      * Loading resource file from any URL : "http://howtodoinjava.com/readme.txt"
-     * @return
+     * @return resource data as string
      * @throws IOException
      */
     public String getResourceData(String location) throws IOException{
