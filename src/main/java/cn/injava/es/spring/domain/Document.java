@@ -1,6 +1,8 @@
 package cn.injava.es.spring.domain;
 
 /**
+ * elasticsearch中的document对象的封装
+ *
  * Created by Green Lei on 2015/11/17 18:39.
  */
 public class Document<T> {

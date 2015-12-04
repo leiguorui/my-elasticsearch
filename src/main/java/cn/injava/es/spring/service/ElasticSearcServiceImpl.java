@@ -1,32 +1,42 @@
 package cn.injava.es.spring.service;
 
 import cn.injava.es.spring.domain.Document;
+import cn.injava.es.spring.domain.Log;
 import cn.injava.es.spring.domain.Post;
+import cn.injava.es.spring.utils.CustomResourceLoader;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.ResultsExtractor;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Green Lei on 2015/11/17 12:02.
  */
 @Service
-public class PostServiceImpl implements PostService{
+public class ElasticSearcServiceImpl implements ElasticSearchService {
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private CustomResourceLoader resourceLoader;
 
     Gson gson = new Gson();
 
@@ -60,5 +70,36 @@ public class PostServiceImpl implements PostService{
         });
 
         return result;
+    }
+
+    /**
+     * 保存日志
+     *
+     * @param log
+     * @return
+     */
+    @Override
+    public Log saveLog(Document<Log> log) {
+        IndexQuery indexQuery = new IndexQueryBuilder().withObject(log.getDocument())
+                .withIndexName(log.getIndexName())
+                .withType(log.getTypeName()).build();
+
+        elasticsearchTemplate.bulkIndex(Arrays.asList(indexQuery));
+        elasticsearchTemplate.refresh(log.getIndexName(), true);
+
+        return log.getDocument();
+    }
+
+    /**
+     * 设置index的template
+     *
+     * @param template
+     * @return
+     */
+    @Override
+    public void setIndexTemplate(JsonObject template) throws IOException {
+        String indexTemplate = resourceLoader.getResourceData("classpath:/es/template/sirius_log_template.json");
+
+        restTemplate.put("http://10.0.0.40:9200/_template/sirius_logs_per_index", indexTemplate);
     }
 }

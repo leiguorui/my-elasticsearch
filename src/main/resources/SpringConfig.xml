@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:elasticsearch="http://www.springframework.org/schema/data/elasticsearch"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/data/elasticsearch http://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch.xsd">
+    <mvc:annotation-driven />
+    <context:component-scan base-package="cn.injava.es" />
+
+    <!--mysql database connect-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="" />
+        <property name="username" value="" />
+        <property name="password" value="" />
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="typeAliasesPackage" value="com.github.elizabetht.model"/>
+        <property name="mapperLocations" value="classpath*:cn/injava/es/spring/dao/*.xml" />
+    </bean>
+
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cn.injava.es.spring.dao" />
+    </bean>
+    <!-- // mysql database connect-->
+
+    <!--elasticsearch config-->
+    <elasticsearch:repositories base-package="cn.injava.es.spring.repository" />
+    <elasticsearch:transport-client id="client" cluster-nodes="10.0.0.40:9300" cluster-name="elasticsearch_logging" />
+    <bean name="elasticsearchTemplate" class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
+        <constructor-arg name="client" ref="client"/>
+    </bean>
+    <!-- // elasticsearch config-->
+
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
+    <bean id="resourceLoader" class="cn.injava.es.spring.utils.CustomResourceLoader"></bean>
+</beans>

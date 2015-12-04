@@ -1,6 +1,6 @@
 {
   "_my_comment": "车源汇日志在elasticsearch中index template",
-  "template": "sirius-log-*",
+  "template": "sirius_log_*",
   "settings": {
     "number_of_shards": 3,
     "number_of_replicas": 1

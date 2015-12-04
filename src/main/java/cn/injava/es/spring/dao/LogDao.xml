@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.injava.es.spring.dao.LogDao">
+    <select id="getLogByLimit" resultType="cn.injava.es.spring.domain.Log" parameterType="Integer">
+        SELECT *
+        FROM
+        sct_vip_tianlang_user_operation_log
+        ORDER BY auto_id DESC
+        limit #{from}, #{to};
+    </select>
+</mapper>

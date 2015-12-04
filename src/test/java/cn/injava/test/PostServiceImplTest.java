@@ -1,37 +1,23 @@
 package cn.injava.test;
 
+import cn.injava.es.spring.dao.LogDao;
 import cn.injava.es.spring.domain.Document;
+import cn.injava.es.spring.domain.Log;
 import cn.injava.es.spring.domain.Post;
 import cn.injava.es.spring.domain.Tag;
-import cn.injava.es.spring.service.PostService;
-import com.google.gson.Gson;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.common.jackson.core.JsonEncoding;
-import org.elasticsearch.common.jackson.core.JsonFactory;
-import org.elasticsearch.common.jackson.core.JsonGenerator;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHitField;
-import org.elasticsearch.search.aggregations.Aggregations;
-import org.junit.Assert;
+import cn.injava.es.spring.service.ElasticSearchService;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.ResultsExtractor;
-import org.springframework.data.elasticsearch.core.query.IndexQuery;
-import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.*;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -42,13 +28,16 @@ import static org.junit.Assert.assertThat;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:elasticsearch.xml" })
+@ContextConfiguration(locations = { "classpath:SpringConfig.xml" })
 public class PostServiceImplTest{
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
 
     @Autowired
-    private PostService postService;
+    private ElasticSearchService esService;
+
+    @Autowired
+    private LogDao logDao;
 
     @Before
     public void before() {
@@ -75,7 +64,7 @@ public class PostServiceImplTest{
                 .withPageable(new PageRequest(0, 2))
                 .build();
         // when
-        List<Post> posts = postService.query(searchQuery);
+        List<Post> posts = esService.query(searchQuery);
 
     }
 
@@ -98,7 +87,25 @@ public class PostServiceImplTest{
         document.setTypeName("test-type");
         document.setDocument(post);
 
-        postService.save(document);
+        esService.save(document);
+    }
 
+    @Test
+    public void testLogDao() throws Exception {
+        String nowDate = new DateTime().toString("yyyy-MM-dd");
+        String indexName = "sirius_log_"+nowDate;
+        String typeName = "user_action";
+
+        List<Log> result =  logDao.getLogByLimit(1, 10);
+        System.out.println(result.size());
+
+        for (Log log : result){
+            Document<Log> document = new Document<>();
+            document.setIndexName(indexName);
+            document.setTypeName(typeName);
+            document.setDocument(log);
+
+            esService.saveLog(document);
+        }
     }
 }
