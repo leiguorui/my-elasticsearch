@@ -47,6 +47,25 @@
     </bean>
     <!-- // elasticsearch config-->
 
+    <!--redis config-->
+    <bean id="redisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis_maxIdle}" />
+        <property name="maxActive" value="${redis_maxActive}" />
+        <property name="maxWait" value="${redis_maxWaitMillis}" />
+        <property name="testOnBorrow" value="${redis_testOnBorrow}" />
+    </bean>
+    <bean id="redisConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="poolConfig" ref="redisPoolConfig" />
+        <property name="hostName" value="${redis_host}" />
+        <property name="port" value="${redis_port}" />
+        <property name="password" value="${redis_pass}" />
+    </bean>
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="redisConnectionFactory" />
+    </bean>
+    <!-- // redis config-->
+
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
     <bean id="resourceLoader" class="cn.injava.es.spring.utils.CustomResourceLoader"></bean>
 </beans>

@@ -9,9 +9,14 @@
     <version>1.0-SNAPSHOT</version>
     <properties>
         <springframework.version>4.0.2.RELEASE</springframework.version>
+        <logback-core.version>1.0.13</logback-core.version>
+        <jedis.version>2.1.0</jedis.version>
+        <spring-data-redis.version>1.1.1.RELEASE</spring-data-redis.version>
     </properties>
 
     <dependencies>
+
+        <!--elasticsearch-->
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
@@ -22,6 +27,7 @@
             <artifactId>spring-data-elasticsearch</artifactId>
             <version>1.2.0.RELEASE</version>
         </dependency>
+        <!-- // elasticsearch-->
 
         <dependency>
             <groupId>junit</groupId>
@@ -30,6 +36,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!--spring-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
@@ -56,7 +63,9 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${springframework.version}</version>
         </dependency>
+        <!-- // spring-->
 
+        <!--mybatis and mysql-->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
@@ -67,12 +76,25 @@
             <artifactId>mybatis-spring</artifactId>
             <version>1.1.1</version>
         </dependency>
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.21</version>
         </dependency>
+        <!-- // mybatis and mysql-->
+
+        <!--redis-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>${spring-data-redis.version}</version>
+        </dependency>
+        <!-- // redis-->
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -85,6 +107,24 @@
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
         </dependency>
+
+        <!--log back-->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-access</artifactId>
+            <version>${logback-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback-core.version}</version>
+        </dependency>
+        <!--log back-->
 
     </dependencies>
 
