@@ -40,8 +40,10 @@
     <!-- // mysql mybatis database connect-->
 
     <!--elasticsearch config-->
-    <elasticsearch:repositories base-package="cn.injava.es.spring.repository" />
-    <elasticsearch:transport-client id="client" cluster-nodes="${es.node}" cluster-name="elasticsearch_logging" />
+    <bean id="client" class="org.springframework.data.elasticsearch.client.TransportClientFactoryBean">
+        <property name="clusterNodes" value="${es.node}" />
+        <property name="clusterName" value="${es.cluster.name}" />
+    </bean>
     <bean name="elasticsearchTemplate" class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
         <constructor-arg name="client" ref="client"/>
     </bean>
