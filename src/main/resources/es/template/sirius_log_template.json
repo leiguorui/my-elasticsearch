@@ -3,7 +3,22 @@
   "template": "sirius_log_*",
   "settings": {
     "number_of_shards": 1,
-    "number_of_replicas": 0
+    "number_of_replicas": 0,
+    "index.refresh_interval": "5s",
+    "analysis" : {
+      "char_filter" : {
+        "my_mapping" : {
+          "type" : "mapping",
+          "mappings" : ["0:0:0:0:0:0:0:1=>172.0.0.1", "localhost.localdomain=>172.0.0.1"]
+        }
+      },
+      "analyzer" : {
+        "custom_with_char_filter" : {
+          "tokenizer" : "standard",
+          "char_filter" : ["my_mapping"]
+        }
+      }
+    }
   },
   "mappings": {
     "user_action": {
@@ -14,7 +29,7 @@
         "path": "id"
       },
       "properties": {
-        "timestamp": {
+        "_timestamp": {
           "type": "date",
           "fielddata": {
             "format": "doc_values"
@@ -26,6 +41,16 @@
         },
         "remote_ip": {
           "type": "ip"
+        },
+        "server_ip": {
+          "type": "string",
+          "analyzer":  "custom_with_char_filter"
+        },
+        "create_time": {
+          "enabled": true,
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss.SSS",
+          "store": true
         }
       }
     }

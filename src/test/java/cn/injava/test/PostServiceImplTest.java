@@ -11,7 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.ElasticsearchException;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
@@ -38,6 +40,9 @@ public class PostServiceImplTest{
 
     @Autowired
     private LogDao logDao;
+
+    @Value( "${app.index.suffix}" )
+    private String indexSuffix;
 
     @Before
     public void before() {
@@ -97,11 +102,11 @@ public class PostServiceImplTest{
 
     @Test
     public void testLogSave() throws Exception {
-        String nowDate = new DateTime().toString("yyyy-MM-dd");
+        String nowDate = new DateTime().toString(indexSuffix);
         String indexName = "sirius_log_"+nowDate;
         String typeName = "user_action";
 
-        List<Log> result =  logDao.getLogByLimit(1, 10);
+        List<Log> result =  logDao.getLogByLimit(0, 1);
         System.out.println(result.size());
 
         for (Log log : result){
@@ -110,7 +115,11 @@ public class PostServiceImplTest{
             document.setTypeName(typeName);
             document.setDocument(log);
 
-            esService.saveLog(document);
+            try {
+                esService.saveLog(document);
+            }catch (ElasticsearchException e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 }
