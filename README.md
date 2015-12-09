@@ -27,7 +27,8 @@ To connect to the locally installed ES server,
 
 ####   elasticsearch的常用操作
 
-+   创建 mapping的template : curl -XPUT localhost:9200/_template/dnslog_template -d TemplateJsonContent
++   创建 mapping的template : curl -XPUT localhost:9200/_template/my_template -d MyTemplateJsonContent
++   如何测试分词器:curl -XGET 'localhost:9200/my_index/_analyze?analyzer=my_analyzer&pretty=true' -d 'aaaa'
 
 ####    参考文档
 +   https://engineering.opendns.com/2015/05/05/elasticsearch-you-know-for-logs/
