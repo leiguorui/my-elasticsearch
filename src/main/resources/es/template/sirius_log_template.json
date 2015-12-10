@@ -2,8 +2,8 @@
   "_my_comment": "车源汇日志在elasticsearch中index template",
   "template": "sirius_log_*",
   "settings": {
-    "number_of_shards": 1,
-    "number_of_replicas": 0,
+    "number_of_shards": 3,
+    "number_of_replicas": 1,
     "index.refresh_interval": "5s",
     "analysis" : {
       "char_filter" : {
@@ -47,10 +47,10 @@
           "analyzer":  "custom_with_char_filter"
         },
         "create_time": {
-          "enabled": true,
           "type": "date",
           "format": "yyyy-MM-dd HH:mm:ss.SSS",
-          "store": true
+          "store": true,
+          "doc_values": true
         }
       }
     }
