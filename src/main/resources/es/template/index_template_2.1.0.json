@@ -1,0 +1,61 @@
+{
+  "_my_comment": "车源汇日志在elasticsearch 2.1.0中的index template,主要是修改date类型为epoch_millis",
+  "template": "sirius_log_*",
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 1,
+    "index.refresh_interval": "5s",
+    "analysis": {
+      "char_filter": {
+        "my_mapping": {
+          "type": "mapping",
+          "mappings": [
+            "0:0:0:0:0:0:0:1=>172.0.0.1",
+            "localhost.localdomain=>172.0.0.1"
+          ]
+        }
+      },
+      "analyzer": {
+        "custom_with_char_filter": {
+          "tokenizer": "standard",
+          "char_filter": [
+            "my_mapping"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "_default_": {
+      "_timestamp": {
+        "type": "date",
+        "enabled": true
+      }
+    },
+    "user_action": {
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "uri": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "remote_ip": {
+          "type": "ip"
+        },
+        "server_ip": {
+          "type": "string",
+          "analyzer": "custom_with_char_filter"
+        },
+        "create_time": {
+          "type": "date",
+          "index": "not_analyzed",
+          "format": "epoch_millis",
+          "store": true,
+          "doc_values": true
+        }
+      }
+    }
+  }
+}

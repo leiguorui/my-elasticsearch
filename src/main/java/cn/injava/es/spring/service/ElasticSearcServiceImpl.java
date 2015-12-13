@@ -102,7 +102,7 @@ public class ElasticSearcServiceImpl implements ElasticSearchService {
      */
     @Override
     public void setIndexTemplate(JsonObject template) throws IOException {
-        String indexTemplate = resourceLoader.getResourceData("classpath:/es/template/sirius_log_template.json");
+        String indexTemplate = resourceLoader.getResourceData("classpath:/es/template/index_template_1.7.2.json");
 
         restTemplate.put(esHost+"/_template/sirius_logs_per_index", indexTemplate);
     }
